@@ -1,5 +1,6 @@
 import dash
 from dash import dcc, html
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
@@ -27,8 +28,8 @@ volcano_fig = go.Figure(
 )
 
 volcano_fig.update_layout(
-    title="Volcano Plot (Click on a point)",
-    xaxis_title="log2 Fold Change",
+    title="Volcano plot (Click on a point)",
+    xaxis_title="log2 Fold change",
     yaxis_title="-log10 Adjusted P-value",
     hovermode="closest",
     height=600,
@@ -36,7 +37,7 @@ volcano_fig.update_layout(
 
 app.layout = html.Div(
     children=[
-        html.H1("Protein Activity Dashboard"),
+        html.H1("Protein activity dashboard"),
         dcc.Graph(
             id="volcano-plot",
             figure=volcano_fig,
@@ -44,6 +45,59 @@ app.layout = html.Div(
         ),
     ]
 )
+
+
+@app.callback(
+    [Output("boxplot", "figure")],
+    [Input("volcano-plot", "click_data")],
+)
+def update_boxplot(click_data):
+    if click_data is None:
+        return go.Figure(), ""
+
+    gene_symbol = click_data["points"][0]["customdata"]
+
+    row_s4a = s4a_values[s4a_values["EntrezGeneSymbol"] == gene_symbol]
+
+    if row_s4a.empty:
+        return go.Figure(), f"No data found for gene: {gene_symbol}"
+
+    relevant_cols = [c for c in s4a_values.columns if ".OD" in c or ".YD" in c]
+
+    old_cols = [c for c in relevant_cols if ".OD" in c]
+    young_cols = [c for c in relevant_cols if ".YD" in c]
+
+    old_values = row_s4a[old_cols].values.flatten()
+    young_values = row_s4a[young_cols].values.flatten()
+
+    box_data = []
+    if len(young_values) > 0:
+        box_data.append(
+            go.Box(
+                y=young_values,
+                name="Young",
+                boxpoints="all",
+                boxmean=True
+            )
+        )
+    if len(old_values) > 0:
+        box_data.append(
+            go.Box(
+                y=old_values,
+                name="Old",
+                boxpoints="all",
+                boxmean=True
+            )
+        )
+
+    box_fig = go.Figure(data=box_data)
+    box_fig.update_layout(
+        title=f"Expression for {gene_symbol}",
+        yaxis_title="Protein concentration",
+    )
+
+    return box_fig, ""
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)
