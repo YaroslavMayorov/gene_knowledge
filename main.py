@@ -43,24 +43,31 @@ app.layout = html.Div(
             figure=volcano_fig,
             style={"width": "70%", "display": "inline-block", "vertical-align": "top"},
         ),
+        html.Div(
+            [
+                html.H2("Boxplot: Young vs Old"),
+                dcc.Graph(id="boxplot"),
+            ],
+            style={"width": "25%", "display": "inline-block", "marginLeft": "20px"},
+        ),
     ]
 )
 
 
 @app.callback(
-    [Output("boxplot", "figure")],
-    [Input("volcano-plot", "click_data")],
+    Output("boxplot", "figure"),
+    [Input("volcano-plot", "clickData")],
 )
 def update_boxplot(click_data):
     if click_data is None:
-        return go.Figure(), ""
+        return go.Figure()
 
     gene_symbol = click_data["points"][0]["customdata"]
 
     row_s4a = s4a_values[s4a_values["EntrezGeneSymbol"] == gene_symbol]
 
     if row_s4a.empty:
-        return go.Figure(), f"No data found for gene: {gene_symbol}"
+        return go.Figure()
 
     relevant_cols = [c for c in s4a_values.columns if ".OD" in c or ".YD" in c]
 
@@ -96,7 +103,7 @@ def update_boxplot(click_data):
         yaxis_title="Protein concentration",
     )
 
-    return box_fig, ""
+    return box_fig
 
 
 if __name__ == "__main__":
