@@ -29,7 +29,7 @@ volcano_fig = go.Figure(
 )
 
 volcano_fig.update_layout(
-    title="Volcano plot (Click on a point)",
+    title="Interactive volcano plot",
     xaxis_title="log2 Fold change",
     yaxis_title="-log10 Adjusted P-value",
     hovermode="closest",
@@ -57,16 +57,11 @@ app.layout = html.Div(
                 ),
                 html.Div(
                     [
-                        html.H2("Boxplot: Young vs Old"),
+                        html.H3("Boxplot: Young vs Old"),
                         dcc.Graph(
                             id="boxplot",
                             style={"height": "500px", "width": "100%"}
                         ),
-                        html.Div([
-                            html.Button("Show All", id="paper-button", n_clicks=0, style={"display": "none"}),
-                            html.Div(id="paper-info"),
-                        ]),
-                        dcc.Store(id="stored-pubmed-data")
                     ],
                     style={
                         "width": "30%",
@@ -86,8 +81,33 @@ app.layout = html.Div(
                 "width": "100%",
                 "flexWrap": "wrap"
             },
+        ),
+        html.Div(
+            children=[
+                html.Button(
+                    "Show All",
+                    id="paper-button",
+                    n_clicks=0,
+                    style={
+                        "display": "none",
+                    }
+                ),
+                html.Div(
+                    id="paper-info",
+                    style={
+                        "width": "80%",
+                    }
+                ),
+                dcc.Store(id="stored-pubmed-data")
+            ],
+            style={
+                "display": "flex",
+                "flexDirection": "column",
+                "alignItems": "center",
+            }
         )
-    ]
+    ],
+    style={"fontFamily": "verdana"}
 )
 
 
@@ -195,9 +215,11 @@ def click_action(n_clicks, pubmed_data):
                     f"{paper['text']}",
                     href=f"https://pubmed.ncbi.nlm.nih.gov/{paper['pubmed']}/",
                     target="_blank",
+                    className="paper-link"
                 ),
                 html.Br(),
                 html.Span(f"PubMed ID: {paper['pubmed']}"),
+                html.Hr(style={"border": "0.5px solid #ddd"})
             ]
         )
         for paper in output_data
@@ -205,7 +227,10 @@ def click_action(n_clicks, pubmed_data):
 
     paper_info = html.Div(
         [
-            html.Strong("Gene References:"),
+            html.Strong("Gene References:",
+                        style={"fontSize": "20px"}
+                        ),
+            html.Br(),
             html.Br(),
         ]
         + links
