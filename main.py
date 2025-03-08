@@ -62,7 +62,11 @@ app.layout = html.Div(
                             id="boxplot",
                             style={"height": "500px", "width": "100%"}
                         ),
-                        html.Div(id="paper-info", style={"marginTop": "20px"}),
+                        html.Div([
+                            html.Button("Show All", id="paper-button", n_clicks=0, style={"display": "none"}),
+                            html.Div(id="paper-info"),
+                        ]),
+                        dcc.Store(id="stored-pubmed-data")
                     ],
                     style={
                         "width": "30%",
@@ -88,18 +92,18 @@ app.layout = html.Div(
 
 
 @app.callback(
-    [Output("boxplot", "figure"), Output("paper-info", "children")],
+    [Output("boxplot", "figure"), Output("stored-pubmed-data", "data")],
     [Input("volcano-plot", "clickData")],
 )
 def update_boxplot(click_data):
     if click_data is None:
-        return go.Figure(), ""
+        return go.Figure(), []
 
     gene_symbol = click_data["points"][0]["customdata"]
     row_s4a = s4a_values[s4a_values["EntrezGeneSymbol"] == gene_symbol]
 
     if row_s4a.empty:
-        return go.Figure(), f"No data found for gene: {gene_symbol}"
+        return go.Figure(layout={"title": f"No data for {gene_symbol}"}), []
 
     relevant_cols = [c for c in s4a_values.columns if ".OD" in c or ".YD" in c]
 
@@ -136,44 +140,77 @@ def update_boxplot(click_data):
         title_x=0.5
     )
 
-    paper_info = f"No papers about {gene_symbol} found."
     gene_id = row_s4a.iloc[0]["EntrezGeneID"]
     try:
         query = f"http://mygene.info/v3/gene/{gene_id}"
         res_query = requests.get(query)
+        if res_query.status_code == 404:
+            return box_fig, [{"text": f"No papers about {gene_symbol} found", "pubmed": "error"}]
         if res_query.status_code != 200:
             raise Exception(f"{res_query.status_code}: {res_query.text}")
 
         pubmed_data = res_query.json()["generif"]
-        if len(pubmed_data) > 0:
-            links = [
-                html.Div(
-                    [
-                        html.A(
-                            f"{paper['text']}",
-                            href=f"https://pubmed.ncbi.nlm.nih.gov/{paper['pubmed']}/",
-                            target="_blank",
-                        ),
-                        html.Br(),
-                        html.Span(f"PubMed ID: {paper['pubmed']}"),
-                    ]
-                )
-                for paper in pubmed_data
-            ]
-            paper_info = html.Div(
-                [
-                    html.Strong("Gene References:"),
-                    html.Br(),
-                ]
-                + links
-            )
 
     except requests.exceptions.RequestException as e:
-        paper_info = f"Request error to MyGene.info API: {e}"
+        pubmed_data = [{"text": f"Request error: {e}", "pubmed": "error"}]
     except Exception as e:
-        paper_info = f"Error: {e}"
+        pubmed_data = [{"text": f"Error: {e}", "pubmed": "error"}]
+    return box_fig, pubmed_data
 
-    return box_fig, paper_info
+
+@app.callback(
+    output=[
+        dash.Output("paper-info", "children"),
+        dash.Output("paper-button", "style"),
+        dash.Output("paper-button", "children")
+    ],
+    inputs=[
+        dash.Input("paper-button", "n_clicks"),
+        dash.Input("stored-pubmed-data", "data")
+    ],
+)
+def click_action(n_clicks, pubmed_data):
+    if not pubmed_data:
+        return "No papers available.", {"display": "none"}, ""
+
+    if n_clicks is None:
+        n_clicks = 0
+
+    if pubmed_data[0]["pubmed"] == "error":
+        return pubmed_data[0]["text"], {"display": "none"}, ""
+
+    if n_clicks % 2 == 0:
+        output_data = pubmed_data[:5]
+        button_text = "Show All" if len(pubmed_data) > 5 else ""
+    else:
+        output_data = pubmed_data
+        button_text = "Hide"
+
+    button_style = {"display": "block"} if len(pubmed_data) > 5 else {"display": "none"}
+
+    links = [
+        html.Div(
+            [
+                html.A(
+                    f"{paper['text']}",
+                    href=f"https://pubmed.ncbi.nlm.nih.gov/{paper['pubmed']}/",
+                    target="_blank",
+                ),
+                html.Br(),
+                html.Span(f"PubMed ID: {paper['pubmed']}"),
+            ]
+        )
+        for paper in output_data
+    ]
+
+    paper_info = html.Div(
+        [
+            html.Strong("Gene References:"),
+            html.Br(),
+        ]
+        + links
+    )
+    return paper_info, button_style, button_text
 
 
 if __name__ == "__main__":
