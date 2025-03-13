@@ -17,25 +17,70 @@ s4a_values = pd.read_excel(EXCEL_FILE, sheet_name="S4A values", header=2)
 s4b_results = s4b_results.dropna(subset=["EntrezGeneSymbol"])
 s4b_results["negLog10AdjP"] = -np.log10(s4b_results["adj.P.Val"].replace(0, np.nan))
 
-volcano_fig = go.Figure(
-    data=go.Scatter(
-        x=s4b_results["logFC"],
-        y=s4b_results["negLog10AdjP"],
-        mode="markers",
-        text=s4b_results["EntrezGeneSymbol"],
-        customdata=s4b_results["EntrezGeneSymbol"],
-        marker={"size": 6},
-    )
-)
+default_logFC_limit = 1.0
+default_pval_limit = 4
 
-volcano_fig.update_layout(
-    title="Interactive volcano plot",
-    xaxis_title="log2 Fold change",
-    yaxis_title="-log10 Adjusted P-value",
-    hovermode="closest",
-    height=600,
-    title_x=0.5
-)
+
+def get_colors(logFC, negLog10AdjP, fc_limit, pval_limit):
+    colors = []
+    for fc, pval in zip(logFC, negLog10AdjP):
+        if (abs(fc) > fc_limit) or (pval > pval_limit):
+            colors.append("#EE553B")
+        else:
+            colors.append("#636efa")
+    return colors
+
+
+def generate_volcano_plot(fc_limit, pval_limit, data):
+    xvals = data["logFC"]
+    yvals = data["negLog10AdjP"]
+    symbols = data["EntrezGeneSymbol"]
+
+    point_colors = get_colors(xvals, yvals, fc_limit, pval_limit)
+
+    fig = go.Figure([
+        go.Scatter(
+            x=xvals,
+            y=yvals,
+            mode="markers",
+            text=symbols,
+            customdata=symbols,
+            marker=dict(size=6, color=point_colors),
+        )
+    ])
+
+    fig.update_layout(
+        title="Interactive Volcano Plot",
+        xaxis_title="log2 Fold Change",
+        yaxis_title="-log10 Adjusted P-value",
+        hovermode="closest",
+        height=600,
+        title_x=0.5,
+        shapes=[
+            dict(
+                type="line",
+                x0=fc_limit, x1=fc_limit,
+                y0=0, y1=max(yvals),
+                line=dict(color="black", width=1.5, dash="dash")
+            ),
+            dict(
+                type="line",
+                x0=-fc_limit, x1=-fc_limit,
+                y0=0, y1=max(yvals),
+                line=dict(color="black", width=1.5, dash="dash")
+            ),
+            dict(
+                type="line",
+                x0=min(xvals), x1=max(xvals),
+                y0=pval_limit, y1=pval_limit,
+                line=dict(color="black", width=1.5, dash="dash")
+            ),
+        ]
+    )
+    return fig
+
+
+volcano_fig = generate_volcano_plot(default_logFC_limit, default_pval_limit, s4b_results)
 
 app.layout = html.Div(
     children=[
@@ -43,6 +88,24 @@ app.layout = html.Div(
             "Protein activity dashboard",
             style={"textAlign": "center", "width": "100%"}
         ),
+        html.Div([
+            html.Label("logFC threshold"),
+            dcc.Slider(
+                id="logfc-slider",
+                min=0.5, max=1.5, step=0.1,
+                value=1.0,
+                tooltip={"always_visible": True}
+            ),
+            html.Br(),
+            html.Label("P-value threshold"),
+            dcc.Slider(
+                id="pval-slider",
+                min=1, max=10, step=1,
+                value=4,
+                tooltip={"always_visible": True}
+            ),
+        ], style={"width": "50%", "margin": "40px auto 0px auto"},
+            className="slider-container"),
         html.Div(
             children=[
                 dcc.Graph(
@@ -109,6 +172,17 @@ app.layout = html.Div(
     ],
     style={"fontFamily": "verdana"}
 )
+
+
+@app.callback(
+    Output("volcano-plot", "figure"),
+    [
+        Input("logfc-slider", "value"),
+        Input("pval-slider", "value")
+    ]
+)
+def update_volcano_plot(fc_limit, pval_limit):
+    return generate_volcano_plot(fc_limit, pval_limit, s4b_results)
 
 
 @app.callback(

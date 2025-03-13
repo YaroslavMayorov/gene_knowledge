@@ -7,6 +7,10 @@
     #plots-container > div {
         width: 100% !important;
     }
+
+    .slider-container {
+       width: 90% !important;
+    }
 }
 .paper-link {
     font-size: 16px;
@@ -39,4 +43,22 @@
     background-color: #5762e0;
     transform: scale(1.05);
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.slider-container .rc-slider {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.rc-slider-track {
+    background-color: #636efa !important;
+}
+
+.rc-slider-dot-active {
+    border-color: #434b9e !important;
+}
+
+.rc-slider-handle {
+    border-color: #434b9e !important; /* Зеленая рамка */
+    box-shadow: 0 0 10px rgba(71, 80, 170, 0.5) !important; /* Эффект свечения */
 }
