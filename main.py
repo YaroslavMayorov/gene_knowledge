@@ -20,14 +20,17 @@ s4b_results["negLog10AdjP"] = -np.log10(s4b_results["adj.P.Val"].replace(0, np.n
 default_logFC_limit = 1.0
 default_pval_limit = 4
 
+RED_COLOR = "#EE553B"
+BLUE_COLOR = "#636efa"
+
 
 def get_colors(logFC, negLog10AdjP, fc_limit, pval_limit):
     colors = []
     for fc, pval in zip(logFC, negLog10AdjP):
         if (abs(fc) > fc_limit) or (pval > pval_limit):
-            colors.append("#EE553B")
+            colors.append(RED_COLOR)
         else:
-            colors.append("#636efa")
+            colors.append(BLUE_COLOR)
     return colors
 
 
@@ -265,13 +268,15 @@ def update_boxplot(click_data):
 )
 def click_action(n_clicks, pubmed_data):
     if not pubmed_data:
-        return "No papers available.", {"display": "none"}, ""
+        return html.Div([html.Strong("Choose gene for references", style={"fontSize": "20px"})],
+                        style={"margin-bottom": "20px"}), {"display": "none"}, ""
 
     if n_clicks is None:
         n_clicks = 0
 
     if pubmed_data[0]["pubmed"] == "error":
-        return pubmed_data[0]["text"], {"display": "none"}, ""
+        return html.Div([html.Strong(pubmed_data[0]["text"], style={"fontSize": "20px", "color": RED_COLOR})],
+                        style={"margin-bottom": "20px"}), {"display": "none"}, ""
 
     if n_clicks % 2 == 0:
         output_data = pubmed_data[:5]
