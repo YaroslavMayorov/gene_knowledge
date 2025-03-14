@@ -20,9 +20,9 @@ This project provides a Flask-based web service to visualize differences in prot
    - scientific paper titles and URLs where the selected gene name was reported
 
 
-![](images/volcanoplot_boxplot.png)
+![](image/volcanoplot_boxplot.png)
 
-![](images/pubmed_references.png)
+![](image/pubmed_references.png)
 
 ---
 
