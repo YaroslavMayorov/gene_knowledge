@@ -94,18 +94,23 @@ python main.py
 
 ## FAQ
 
-1. **What if port is unavailable?**
+<details>
+<summary><strong> What if port is unavailable?</strong></summary>
 
    By default server is on port 8050. Change the port in `main.py` (line 380):
    ```bash
    app.run_server(port=free_port)
    ```
+</details>
 
-2. **What python version should I use?**
+<details>
+<summary><strong> What python version should I use? </strong></summary>
 
    Python 3.10 is recommended. Earlier versions may work but could introduce compatibility issues.
+</details>
 
-3. **Why did you choose plotly?**
+<details>
+<summary><strong> Why did you choose plotly? </strong></summary>
 
    - Support interactive graphics
   
@@ -114,9 +119,20 @@ python main.py
    - Dash compatibility – allows you to create full-fledged web pages using lists directly in Python.
   
    - Simply graphs created by few lines, but deep customization is available too.
+</details>
 
-4. **Why do you use Dash and Flask at the same time? Dash is build on Flask.**
+<details>
+<summary><strong> Why do you use Dash and Flask at the same time? Dash is build on Flask. </strong></summary>
 
    Dash is built on Flask, but by default, it creates its own Flask instance internally. The Flask instance is needed to integrate the Dash application into a larger Flask app. This is important when working on real projects.
-
+</details>
 ---
+
+## Contacts 
+
+If you have any questions, feel free to contact me:  
+
+- **Email:** sasha.val2006@gmail.com
+- **Telegram:** @thedreamertype
+
+
