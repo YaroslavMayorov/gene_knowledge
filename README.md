@@ -11,6 +11,16 @@
 
 ---
 
+## Overview
+
+This project provides a Flask-based web service to visualize differences in protein activity levels interactively, which includes:
+
+   - an interactive volcano plot with clickable points to view boxplots
+   - boxplots (Young vs. Old) with additional points representing the protein concentration value in each sample
+   - scientific paper titles and URLs where the selected gene name was reported
+
+---
+
 ## Project Structure
 
 ```bash
