@@ -31,19 +31,19 @@
 
 ## Setup and Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
 ```bash
 git clone git@github.com:YaroslavMayorov/gene_knowledge.git
 cd gene_knowledge
 ```
 
-2. Create a virtual environment:
+2. **Create a virtual environment:**
 ```bash
 python3.10 -m venv venv
 source venv/bin/activate
 ```
 
-3. Install dependencies:
+3. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
@@ -52,23 +52,23 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Launch the web service:
+1. **Launch the web service:**
 ```bash
 python main.py
 ```
 
-2. Open a browser:
+2. **Open a browser:**
 
-Go to the address that is displayed in the console, usually this **http://127.0.0.1:8050** .
+   Go to the address that is displayed in the console, usually this **http://127.0.0.1:8050** .
 
-3. Interact with the volcano plot:
+3. **Interact with the volcano plot:**
 
-Hover over the pointx to see information about the gene's symbol, p-value and fold change. Use sliders to move the threshold lines to highlight significant points.
+   Hover over the pointx to see information about the gene's symbol, p-value and fold change. Use sliders to move the threshold lines to highlight significant points.
 
-4. Click on the point to see the boxplot:
+4. **Click on the point to see the boxplot:**
 
-The canvas will appear, which show comparison between protein concentraction in young and old samples for selected gene. 
+   The canvas will appear, which show comparison between protein concentraction in young and old samples for selected gene. 
 
-5. Viewing medical publication with MyGene.info:
+5. **Viewing medical publication with MyGene.info:**
 
-When you select a gene, you will see a link and the pubmed id of scientific articles on this gene.
+   When you select a gene, you will see the links and the pubmed id of scientific articles on this gene. By default only 5 links are showed. Click on the button to show all. Click again to hide. 
