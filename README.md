@@ -40,7 +40,24 @@ cd gene_knowledge
 2. **Create a virtual environment:**
 ```bash
 python3.10 -m venv venv
+```
+
+Linux / MacOs
+
+```bash
 source venv/bin/activate
+```
+
+Windows (Command Prompt (cmd.exe))
+
+```bash
+venv\Scripts\activate
+```
+
+Windows (PowerShell)
+
+```bash
+venv\Scripts\Activate.ps1
 ```
 
 3. **Install dependencies:**
@@ -71,4 +88,35 @@ python main.py
 
 5. **Viewing medical publication with MyGene.info:**
 
-   When you select a gene, you will see the links and the pubmed id of scientific articles on this gene. By default only 5 links are showed. Click on the button to show all. Click again to hide. 
+   When you select a gene, you will see the links and the pubmed id of scientific articles on this gene. By default only 5 links are showed. Click on the button to show all. Click again to hide.
+
+---
+
+## FAQ
+
+1. **What if port is unavailable?**
+
+   By default server is on port 8050. Change the port in `main.py` (line 380):
+   ```bash
+   app.run_server(port=free_port)
+   ```
+
+2. **What python version should I use?**
+
+   Python 3.10 is recommended. Earlier versions may work but could introduce compatibility issues.
+
+3. **Why did you choose plotly?**
+
+   - Support interactive graphics
+  
+   - Clear documentation – lots of examples, easy to understand.
+  
+   - Dash compatibility – allows you to create full-fledged web pages using lists directly in Python.
+  
+   - Simply graphs created by few lines, but deep customization is available too.
+
+4. **Why do you use Dash and Flask at the same time? Dash is build on Flask.**
+
+   Dash is built on Flask, but by default, it creates its own Flask instance internally. The Flask instance is needed to integrate the Dash application into a larger Flask app. This is important when working on real projects.
+
+---
