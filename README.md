@@ -26,3 +26,33 @@
 ├── requirements.txt            # Python dependencies for the project
 └── README.md
 ```
+
+---
+
+## Setup and Installation
+
+1. Clone the repository:
+```bash
+git clone git@github.com:YaroslavMayorov/gene_knowledge.git
+cd gene_knowledge
+```
+
+2. Create a virtual environment:
+```bash
+python3.10 -m venv venv
+source venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Run program:
+```bash
+python main.py
+```
+
+Program runs locally on http://127.0.0.1:8050/
+
+---
