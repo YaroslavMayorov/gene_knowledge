@@ -84,7 +84,7 @@ python main.py
 
 4. **Click on the point to see the boxplot:**
 
-   The canvas will appear, which show comparison between protein concentraction in young and old samples for selected gene. 
+   The canvas will appear, which shows comparison between protein concentraction in young and old samples for selected gene. 
 
 5. **Viewing medical publication with MyGene.info:**
 
