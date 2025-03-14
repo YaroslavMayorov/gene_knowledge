@@ -18,9 +18,9 @@
 │   └── style.css               # CSS file for styling
 ├── data
 │   └── NIHMS1635539-supplement-1635539_Sup_tab_4.xlsx  
-│        # Main Excel file containing:
-│        # - "S4B limma results" sheet (for volcano plot data)
-│        # - "S4A values" sheet (for boxplot data)
+│       # Main Excel file containing:
+│       # - "S4B limma results" sheet (for volcano plot data)
+│       # - "S4A values" sheet (for boxplot data)
 ├── main.py                     # Main Flask + Dash application entry point
 ├── requirements.txt            # Python dependencies for the project
 └── README.md
