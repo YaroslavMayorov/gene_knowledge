@@ -126,6 +126,7 @@ python main.py
 
    Dash is built on Flask, but by default, it creates its own Flask instance internally. The Flask instance is needed to integrate the Dash application into a larger Flask app. This is important when working on real projects.
 </details>
+
 ---
 
 ## Contacts 
