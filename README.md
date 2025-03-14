@@ -80,7 +80,7 @@ python main.py
 
 3. **Interact with the volcano plot:**
 
-   Hover over the pointx to see information about the gene's symbol, p-value and fold change. Use sliders to move the threshold lines to highlight significant points.
+   Hover over the pointы to see information about the gene's symbol, p-value and fold change. Use sliders to move the threshold lines to highlight significant points.
 
 4. **Click on the point to see the boxplot:**
 
