@@ -48,11 +48,27 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Run program:
+---
+
+## Usage
+
+1. Launch the web service:
 ```bash
 python main.py
 ```
 
-Program runs locally on http://127.0.0.1:8050/
+2. Open a browser:
 
----
+Go to the address that is displayed in the console, usually this **http://127.0.0.1:8050** .
+
+3. Interact with the volcano plot:
+
+Hover over the pointx to see information about the gene's symbol, p-value and fold change. Use sliders to move the threshold lines to highlight significant points.
+
+4. Click on the point to see the boxplot:
+
+The canvas will appear, which show comparison between protein concentraction in young and old samples for selected gene. 
+
+5. Viewing medical publication with MyGene.info:
+
+When you select a gene, you will see a link and the pubmed id of scientific articles on this gene.
