@@ -95,6 +95,18 @@ python main.py
 ## FAQ
 
 <details>
+<summary><strong> Why did I choose this internship?</strong></summary>
+
+I studied in a biology-focused class, so I have a strong background in biology. I am especially interested in aging and ways to combat age-related diseases. I have long wanted to work in bioinformatics, and this internship is a great opportunity for me.
+
+For about two years, I have been working with Flask, developing various web applications, from simple projects to multi-page websites. You can see one of my projects here: [arthouserooms.pythonanywhere.com](https://arthouserooms.pythonanywhere.com/).
+
+I also completed a data analysis course from Tinkoff and a machine learning specialization from Yandex, which gave me valuable experience working with pandas and matplotlib. In addition, I prepared for the DANO Olympiad in data analysis, so I have a solid understanding of statistics, data processing, and interpretation.
+
+I really want to join your team, because this topic is really close to me. I am ready to learn new things and help develop a useful tool for biological data research. I would be grateful for the opportunity to be part of this project!
+</details>
+
+<details>
 <summary><strong> What if port is unavailable?</strong></summary>
 
    By default server is on port 8050. Change the port in `main.py` (line 380):
