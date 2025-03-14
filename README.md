@@ -13,6 +13,7 @@
 
 ## Project Structure
 
+```bash
 .
 ├── assets
 │   └── style.css               # CSS file for styling
@@ -24,4 +25,4 @@
 ├── main.py                     # Main Flask + Dash application entry point
 ├── requirements.txt            # Python dependencies for the project
 └── README.md
-
+```
